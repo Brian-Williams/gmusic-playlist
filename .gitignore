@@ -2,8 +2,6 @@
 *.log
 *.pyc
 
-# provide a default folder for outputs
-playlists
 .idea
 !ExamplePlaylist.csv
 ### Python template

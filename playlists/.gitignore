@@ -1,0 +1,5 @@
+# provide a default folder for outputs
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
