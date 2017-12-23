@@ -218,7 +218,8 @@ def calculate_stats_results(stats,total_tracks):
     results['genres'] = Counter(stats['genres'])
     results['artists'] = Counter(stats['artists'])
     results['years'] = Counter(stats['years'])
-    results['playback_ratio'] = stats['total_playcount']/float(total_tracks)
+    if float(total_tracks) != 0:
+        results['playback_ratio'] = stats['total_playcount']/float(total_tracks)
     return results    
 
 # logs the stats results
@@ -226,7 +227,10 @@ def log_stats(results):
     log(u'top 3 genres: '+repr(results['genres'].most_common(3)))
     log(u'top 3 artists: '+repr(results['artists'].most_common(3)))
     log(u'top 3 years: '+repr(results['years'].most_common(3)))
-    log(u'playlist playback ratio: '+unicode(results['playback_ratio']))
+    try:
+        log(u'playlist playback ratio: '+unicode(results['playback_ratio']))
+    except KeyError:
+        pass
 
 # display version and check prerequisites
 log("gmusic-playlist: "+__version__)
