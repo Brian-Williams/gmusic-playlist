@@ -8,9 +8,9 @@ Example usage:
 
 Example output:
 ```
-Writing songs for playlists/plf3558.csv
-Writing songs for playlists/plf5392.csv
-Writing songs for playlists/plf56CB.csv
+Writing songs for playlists/blues.csv
+Writing songs for playlists/jazzpunk.csv
+Writing songs for playlists/sleeping.csv
 ```
 """
 import sys
@@ -22,15 +22,19 @@ def _make_csv_out_of_m3u8(file):
     with open(file) as fp:
         # To the best of my knowledge m3u8 files don't have playlist names included so just write them as the filename
         playlist_name = os.path.splitext(fp.name)[0] + ".csv"
+        # input format looks like : #EXTINF:207,ABC - The Look Of Love
+        # output format looks like: The Look Of Love,ABC,
         for line in fp:
-            if "\\" in line:
-                song_info = line.split("\\")[-1].strip()
-                if "-" in song_info:
-                    artist = song_info.split("-")[0].strip()
-                    song_name = " ".join([item.strip() for item in song_info.split("-")[1:]]).strip(".mp3")  # "-".join(song_info.strip().split("-")[1:]).strip(".mp3")
+            if line.startswith("#EXTINF:"):
+                song_info = ",".join(line.split(',')[1:])
+                # song_info = line.split("\\")[-1].strip()
+                if " - " in song_info:
+                    split_song_info = song_info.split(" - ")
+                    artist = split_song_info[0].strip()
+                    song_name = " - ".join(split_song_info[1:]).strip()
                     songs.append("{},{},".format(song_name, artist))
                 else:
-                    song_name = song_info.strip(".mp3")
+                    song_name = song_info
                     songs.append(song_name + ",")
 
     with open(str(playlist_name), "w+") as f:
